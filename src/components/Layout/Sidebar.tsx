@@ -8,6 +8,7 @@ import {
   Brain,
 } from 'lucide-react';
 import { useBizTutor } from '../../contexts/BizTutorContext';
+import { useTheme } from '../../contexts/ThemeContext';
 
 const navItems = [
   { id: 'Chat', label: 'Chat', icon: MessageCircle, accent: 'from-pastel-green to-pastel-blue' },
@@ -20,13 +21,20 @@ const navItems = [
 
 const Sidebar: React.FC = () => {
   const { currentTab, setCurrentTab } = useBizTutor();
+  const { isDark } = useTheme();
 
   return (
     <div className="h-full flex flex-col">
       <div className="px-4 py-4">
-        <div className="p-3 rounded-xl glass">
-          <p className="text-sm font-medium gradient-text font-poppins">AI Tutor</p>
-          <p className="text-xs text-gray-300">Interactive learning suite</p>
+        <div className={`p-3 rounded-xl ${
+          isDark ? 'glass' : 'bg-white/60 border border-gray-200'
+        }`}>
+          <p className={`text-sm font-medium font-poppins ${
+            isDark ? 'gradient-text' : 'text-gray-800'
+          } ${!isDark ? 'drop-shadow-md' : ''}`}>AI Tutor</p>
+          <p className={`text-xs ${
+            isDark ? 'text-gray-300' : 'text-gray-600'
+          }`}>Interactive learning suite</p>
         </div>
       </div>
 
@@ -38,16 +46,28 @@ const Sidebar: React.FC = () => {
               <li key={id}>
                 <button
                   onClick={() => setCurrentTab(id)}
-                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-all text-sm glass ${
+                  className={`w-full flex items-center gap-3 px-3 py-2 rounded-lg transition-all text-sm ${
+                    isDark ? 'glass' : 'bg-white/40 border border-gray-200'
+                  } ${
                     active
-                      ? 'shadow-neon-teal'
-                      : 'hover:shadow-neon-lime'
+                      ? isDark ? 'shadow-neon-teal' : 'bg-blue-50 border-blue-200 shadow-glow-blue-soft animate-glow-light'
+                      : isDark ? 'hover:shadow-neon-lime' : 'hover:bg-gray-50 hover:shadow-glow-soft'
                   }`}
                 >
-                  <span className={`w-8 h-8 rounded-md flex items-center justify-center bg-[rgba(255,255,255,0.06)] border border-white/10`}>
-                    <Icon className="w-4 h-4 text-neon-teal" />
+                  <span className={`w-8 h-8 rounded-md flex items-center justify-center ${
+                    isDark 
+                      ? 'bg-[rgba(255,255,255,0.06)] border border-white/10' 
+                      : active 
+                        ? 'bg-blue-100 border border-blue-300 shadow-glow-blue'
+                        : 'bg-gray-100 border border-gray-200'
+                  }`}>
+                    <Icon className={`w-4 h-4 ${
+                      isDark ? 'text-neon-teal' : active ? 'text-blue-600' : 'text-gray-600'
+                    }`} />
                   </span>
-                  <span className="font-medium text-white">{label}</span>
+                  <span className={`font-medium ${
+                    isDark ? 'text-white' : 'text-gray-800'
+                  }`}>{label}</span>
                 </button>
               </li>
             );
@@ -56,8 +76,12 @@ const Sidebar: React.FC = () => {
       </nav>
 
       <div className="px-4 pb-4">
-        <div className="rounded-lg p-3 glass">
-          <p className="text-xs text-gray-300">Tip: Start in Chat to get personalized guidance.</p>
+        <div className={`rounded-lg p-3 ${
+          isDark ? 'glass' : 'bg-white/60 border border-gray-200'
+        }`}>
+          <p className={`text-xs ${
+            isDark ? 'text-gray-300' : 'text-gray-600'
+          }`}>Tip: Start in Chat to get personalized guidance.</p>
         </div>
       </div>
     </div>

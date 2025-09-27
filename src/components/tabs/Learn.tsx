@@ -21,10 +21,12 @@ import {
   ChevronUp
 } from 'lucide-react';
 import { useBizTutor } from '../../contexts/BizTutorContext';
+import { useTheme } from '../../contexts/ThemeContext';
 import type { Lesson } from '../../types/index';
 
 const Learn: React.FC = () => {
   const { lessons, progress, addAttemptLog } = useBizTutor();
+  const { isDark } = useTheme();
   const [selectedLesson, setSelectedLesson] = useState<Lesson | null>(null);
   const [quizAnswers, setQuizAnswers] = useState<Record<number, string>>({});
   const [showResults, setShowResults] = useState(false);
@@ -459,11 +461,15 @@ const Learn: React.FC = () => {
     <div className="max-w-7xl mx-auto">
       {/* Header */}
       <div className="mb-8">
-        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-2 flex items-center">
+        <h1 className={`text-3xl font-bold mb-2 flex items-center ${
+          isDark ? 'text-white' : 'text-gray-800'
+        }`}>
           <BookOpen className="w-8 h-8 mr-3 text-[#4A6FA5]" />
           Learn
         </h1>
-        <p className="text-gray-600 dark:text-gray-300">Explore structured lessons on Business Organization & Management</p>
+        <p className={`${
+          isDark ? 'text-gray-300' : 'text-gray-600'
+        }`}>Explore structured lessons on Business Organization & Management</p>
       </div>
 
       {/* Search and Filter Bar */}
@@ -553,7 +559,11 @@ const Learn: React.FC = () => {
           return (
             <div
               key={originalIndex}
-              className="bg-white dark:bg-gray-800 rounded-xl p-6 border border-gray-200 dark:border-gray-700 hover:shadow-lg transition-all duration-300 cursor-pointer group relative"
+              className={`rounded-xl p-6 border hover:shadow-lg transition-all duration-300 cursor-pointer group relative ${
+                isDark 
+                  ? 'bg-gray-800 border-gray-700' 
+                  : 'bg-white border-gray-200'
+              }`}
               onClick={() => startLesson(lesson)}
             >
               {/* Bookmark Button */}
@@ -594,21 +604,29 @@ const Learn: React.FC = () => {
                 </div>
               </div>
               
-              <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-[#4A6FA5] transition-colors">
+              <h3 className={`text-xl font-semibold mb-3 group-hover:text-[#4A6FA5] transition-colors ${
+                isDark ? 'text-white' : 'text-gray-800'
+              }`}>
                 {lesson.topic}
               </h3>
               
               <div className="mb-4">
-                <p className="text-sm font-medium text-gray-600 dark:text-gray-400 mb-2">Learning Objectives:</p>
+                <p className={`text-sm font-medium mb-2 ${
+                  isDark ? 'text-gray-400' : 'text-gray-600'
+                }`}>Learning Objectives:</p>
                 <ul className="space-y-1">
                   {lesson.objectives.slice(0, 2).map((objective, objIndex) => (
-                    <li key={objIndex} className="text-sm text-gray-600 dark:text-gray-300 flex items-start">
+                    <li key={objIndex} className={`text-sm flex items-start ${
+                      isDark ? 'text-gray-300' : 'text-gray-600'
+                    }`}>
                       <span className="w-1.5 h-1.5 bg-[#4A6FA5] rounded-full mt-2 mr-2 flex-shrink-0"></span>
                       {objective}
                     </li>
                   ))}
                   {lesson.objectives.length > 2 && (
-                    <li className="text-sm text-gray-500 dark:text-gray-400">
+                    <li className={`text-sm ${
+                      isDark ? 'text-gray-400' : 'text-gray-500'
+                    }`}>
                       +{lesson.objectives.length - 2} more objectives
                     </li>
                   )}
@@ -620,19 +638,27 @@ const Learn: React.FC = () => {
                   {lesson.keyTerms.slice(0, 3).map((term, termIndex) => (
                     <span
                       key={termIndex}
-                      className="text-xs px-2 py-1 bg-gray-100 dark:bg-gray-700 text-gray-600 dark:text-gray-300 rounded"
+                      className={`text-xs px-2 py-1 rounded ${
+                        isDark 
+                          ? 'bg-gray-700 text-gray-300' 
+                          : 'bg-gray-100 text-gray-600'
+                      }`}
                     >
                       {term}
                     </span>
                   ))}
                   {lesson.keyTerms.length > 3 && (
-                    <span className="text-xs text-gray-500 dark:text-gray-400">
+                    <span className={`text-xs ${
+                      isDark ? 'text-gray-400' : 'text-gray-500'
+                    }`}>
                       +{lesson.keyTerms.length - 3}
                     </span>
                   )}
                 </div>
                 
-                <div className="flex items-center text-sm text-gray-500 dark:text-gray-400">
+                <div className={`flex items-center text-sm ${
+                  isDark ? 'text-gray-400' : 'text-gray-500'
+                }`}>
                   <Clock className="w-4 h-4 mr-1" />
                   ~15 min
                 </div>

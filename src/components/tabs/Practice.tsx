@@ -25,10 +25,12 @@ import {
   EyeOff
 } from 'lucide-react';
 import { useBizTutor } from '../../contexts/BizTutorContext';
+import { useTheme } from '../../contexts/ThemeContext';
 import type { Question, AttemptLog } from '../../types/index';
 
 const Practice: React.FC = () => {
   const { questions, addAttemptLog, updateProgress, attemptLogs } = useBizTutor();
+  const { isDark } = useTheme();
   const [selectedType, setSelectedType] = useState<string>('all');
   const [currentQuestions, setCurrentQuestions] = useState<Question[]>([]);
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -733,9 +735,13 @@ const Practice: React.FC = () => {
               >
                 <div className="flex items-center mb-3">
                   <Icon className={`w-6 h-6 mr-3 ${mode.color}`} />
-                  <h3 className="font-semibold text-gray-900 dark:text-white">{mode.label}</h3>
+                  <h3 className={`font-semibold ${
+                    isDark ? 'text-white' : 'text-gray-800'
+                  }`}>{mode.label}</h3>
                 </div>
-                <p className="text-sm text-gray-600 dark:text-gray-300">{mode.description}</p>
+                <p className={`text-sm ${
+                  isDark ? 'text-gray-300' : 'text-gray-600'
+                }`}>{mode.description}</p>
               </div>
             );
           })}

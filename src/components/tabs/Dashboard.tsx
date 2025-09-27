@@ -14,9 +14,11 @@ import {
   BarChart3
 } from 'lucide-react';
 import { useBizTutor } from '../../contexts/BizTutorContext';
+import { useTheme } from '../../contexts/ThemeContext';
 
 const Dashboard: React.FC = () => {
   const { lessons, attemptLogs, progress, flashcards, setCurrentTab } = useBizTutor();
+  const { isDark } = useTheme();
   const [showQuickActions, setShowQuickActions] = useState(true);
 
   // Safe calculations with fallbacks

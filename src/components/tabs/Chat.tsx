@@ -87,10 +87,12 @@ import {
   BookOpen
 } from 'lucide-react';
 import { useBizTutor } from '../../contexts/BizTutorContext';
+import { useTheme } from '../../contexts/ThemeContext';
 import type { ChatMessage } from '../../types/index';
 
 const Chat: React.FC = () => {
   const { chatMessages, addChatMessage, dispatch } = useBizTutor();
+  const { isDark } = useTheme();
   const [inputMessage, setInputMessage] = useState('');
   const [isTyping, setIsTyping] = useState(false);
   const [editingMessage, setEditingMessage] = useState<number | null>(null);
@@ -847,15 +849,27 @@ Practice Question: Compare and contrast the advantages and disadvantages of a pa
         <div className="fixed inset-0 bg-black/20 backdrop-blur-sm z-40" onClick={() => setIsFullscreen(false)} />
       )}
       
-      <div className={`${isFullscreen ? 'fixed inset-0 z-50 h-screen' : 'max-w-7xl mx-auto h-[calc(100vh-180px)]'} flex flex-col bg-white dark:bg-gray-900 ${isFullscreen ? 'shadow-2xl' : ''} transition-all duration-300 ease-in-out`}>
+      <div className={`${isFullscreen ? 'fixed inset-0 z-50 h-screen' : 'max-w-7xl mx-auto h-[calc(100vh-180px)]'} flex flex-col ${
+        isDark ? 'bg-gray-900' : 'bg-white'
+      } ${isFullscreen ? 'shadow-2xl' : ''} transition-all duration-300 ease-in-out`}>
       {/* Enhanced Header with Actions */}
-      <div className={`mb-6 flex items-center justify-between p-4 bg-gradient-to-r from-[#4A6FA5]/5 to-[#3d5a8c]/5 dark:from-[#4A6FA5]/10 dark:to-[#3d5a8c]/10 ${isFullscreen ? 'rounded-none border-b border-gray-200 dark:border-gray-700' : 'rounded-xl border border-gray-200 dark:border-gray-700'}`}>
+      <div className={`mb-6 flex items-center justify-between p-4 ${
+        isDark 
+          ? 'bg-gradient-to-r from-[#4A6FA5]/10 to-[#3d5a8c]/10' 
+          : 'bg-gradient-to-r from-[#4A6FA5]/5 to-[#3d5a8c]/5'
+      } ${isFullscreen ? 'rounded-none border-b border-gray-200 dark:border-gray-700' : 'rounded-xl border border-gray-200 dark:border-gray-700'} ${
+        !isDark ? 'shadow-glow-soft' : ''
+      }`}>
         <div className="flex items-center space-x-4">
-          <div className="w-12 h-12 bg-gradient-to-br from-[#4A6FA5] to-[#3d5a8c] rounded-xl flex items-center justify-center shadow-lg">
+          <div className={`w-12 h-12 bg-gradient-to-br from-[#4A6FA5] to-[#3d5a8c] rounded-xl flex items-center justify-center shadow-lg ${
+            !isDark ? 'shadow-glow-blue' : ''
+          }`}>
             <MessageCircle className="w-6 h-6 text-white" />
           </div>
           <div>
-            <h1 className="text-2xl font-bold text-gray-900 dark:text-white mb-1 flex items-center">
+            <h1 className={`text-2xl font-bold mb-1 flex items-center ${
+              isDark ? 'text-white' : 'text-gray-800'
+            }`}>
               AI Tutor Chat
               {isFullscreen && (
                 <span className="ml-3 px-2 py-1 bg-orange-100 dark:bg-orange-900/20 text-orange-600 dark:text-orange-400 rounded-full text-sm font-medium flex items-center">
@@ -869,7 +883,9 @@ Practice Question: Compare and contrast the advantages and disadvantages of a pa
                 </span>
               )}
             </h1>
-            <p className="text-gray-600 dark:text-gray-300">Get instant help with Business Organization & Management concepts</p>
+            <p className={`${
+              isDark ? 'text-gray-300' : 'text-gray-600'
+            }`}>Get instant help with Business Organization & Management concepts</p>
           </div>
         </div>
         
@@ -877,7 +893,11 @@ Practice Question: Compare and contrast the advantages and disadvantages of a pa
           {/* Quick Actions Toggle */}
           <button
             onClick={() => setShowQuickActions(!showQuickActions)}
-            className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+            className={`p-2 rounded-lg transition-colors ${
+              isDark 
+                ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' 
+                : 'bg-gray-100 hover:bg-gray-200 text-gray-600'
+            }`}
             title="Quick Actions"
           >
             <Zap className="w-4 h-4" />
@@ -886,7 +906,11 @@ Practice Question: Compare and contrast the advantages and disadvantages of a pa
           {/* Analytics Toggle */}
           <button
             onClick={() => setShowAnalytics(!showAnalytics)}
-            className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+            className={`p-2 rounded-lg transition-colors ${
+              isDark 
+                ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' 
+                : 'bg-gray-100 hover:bg-gray-200 text-gray-600'
+            }`}
             title="Analytics (Ctrl+B)"
           >
             <BarChart3 className="w-4 h-4" />
@@ -895,7 +919,11 @@ Practice Question: Compare and contrast the advantages and disadvantages of a pa
           {/* Search Toggle */}
           <button
             onClick={() => setShowSearch(!showSearch)}
-            className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+            className={`p-2 rounded-lg transition-colors ${
+              isDark 
+                ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' 
+                : 'bg-gray-100 hover:bg-gray-200 text-gray-600'
+            }`}
             title="Search messages (Ctrl+K)"
           >
             <Search className="w-4 h-4" />
@@ -906,8 +934,12 @@ Practice Question: Compare and contrast the advantages and disadvantages of a pa
             onClick={() => setIsMultiSelect(!isMultiSelect)}
             className={`p-2 rounded-lg transition-colors ${
               isMultiSelect 
-                ? 'bg-[#4A6FA5] text-white' 
-                : 'bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600'
+                ? isDark 
+                  ? 'bg-[#4A6FA5] text-white' 
+                  : 'bg-[#4A6FA5] text-white'
+                : isDark 
+                  ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' 
+                  : 'bg-gray-100 hover:bg-gray-200 text-gray-600'
             }`}
             title="Multi-select (Ctrl+A)"
           >
@@ -917,7 +949,11 @@ Practice Question: Compare and contrast the advantages and disadvantages of a pa
           {/* Settings */}
           <button
             onClick={() => setShowSettings(!showSettings)}
-            className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+            className={`p-2 rounded-lg transition-colors ${
+              isDark 
+                ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' 
+                : 'bg-gray-100 hover:bg-gray-200 text-gray-600'
+            }`}
             title="Settings (Ctrl+S)"
           >
             <Settings className="w-4 h-4" />
@@ -926,7 +962,11 @@ Practice Question: Compare and contrast the advantages and disadvantages of a pa
           {/* Fullscreen Toggle */}
           <button
             onClick={() => setIsFullscreen(!isFullscreen)}
-            className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+            className={`p-2 rounded-lg transition-colors ${
+              isDark 
+                ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' 
+                : 'bg-gray-100 hover:bg-gray-200 text-gray-600'
+            }`}
             title="Fullscreen (Ctrl+F)"
           >
             {isFullscreen ? <Minimize2 className="w-4 h-4" /> : <Maximize2 className="w-4 h-4" />}
@@ -935,7 +975,11 @@ Practice Question: Compare and contrast the advantages and disadvantages of a pa
           {/* Export */}
           <button
             onClick={exportConversation}
-            className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+            className={`p-2 rounded-lg transition-colors ${
+              isDark 
+                ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' 
+                : 'bg-gray-100 hover:bg-gray-200 text-gray-600'
+            }`}
             title="Export conversation (Ctrl+E)"
           >
             <Download className="w-4 h-4" />
@@ -944,7 +988,11 @@ Practice Question: Compare and contrast the advantages and disadvantages of a pa
           {/* Import */}
           <button
             onClick={() => fileInputRef.current?.click()}
-            className="p-2 rounded-lg bg-gray-100 dark:bg-gray-700 hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors"
+            className={`p-2 rounded-lg transition-colors ${
+              isDark 
+                ? 'bg-gray-700 hover:bg-gray-600 text-gray-300' 
+                : 'bg-gray-100 hover:bg-gray-200 text-gray-600'
+            }`}
             title="Import conversation (Ctrl+I)"
           >
             <Upload className="w-4 h-4" />
@@ -953,20 +1001,28 @@ Practice Question: Compare and contrast the advantages and disadvantages of a pa
           {/* Clear */}
           <button
             onClick={clearConversation}
-            className="p-2 rounded-lg bg-red-100 dark:bg-red-900/20 hover:bg-red-200 dark:hover:bg-red-900/30 transition-colors"
+            className={`p-2 rounded-lg transition-colors ${
+              isDark 
+                ? 'bg-red-900/20 hover:bg-red-900/30 text-red-400' 
+                : 'bg-red-100 hover:bg-red-200 text-red-600'
+            }`}
             title="Clear conversation (Ctrl+L)"
           >
-            <Trash2 className="w-4 h-4 text-red-600" />
+            <Trash2 className="w-4 h-4" />
           </button>
           
           {/* Retry */}
           {retryCount > 0 && (
             <button
               onClick={retryLastMessage}
-              className="p-2 rounded-lg bg-orange-100 dark:bg-orange-900/20 hover:bg-orange-200 dark:hover:bg-orange-900/30 transition-colors"
+              className={`p-2 rounded-lg transition-colors ${
+                isDark 
+                  ? 'bg-orange-900/20 hover:bg-orange-900/30 text-orange-400' 
+                  : 'bg-orange-100 hover:bg-orange-200 text-orange-600'
+              }`}
               title="Retry last message (Ctrl+R)"
             >
-              <RefreshCw className="w-4 h-4 text-orange-600" />
+              <RefreshCw className="w-4 h-4" />
             </button>
           )}
         </div>
@@ -974,7 +1030,11 @@ Practice Question: Compare and contrast the advantages and disadvantages of a pa
 
       {/* Quick Actions Panel */}
       {showQuickActions && (
-        <div className="mb-4 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+        <div className={`mb-4 p-4 ${
+          isDark ? 'bg-gray-800' : 'bg-white'
+        } rounded-xl border ${
+          isDark ? 'border-gray-700' : 'border-gray-200'
+        }`}>
           <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
             {[
               { icon: Search, label: 'Search', action: () => setShowSearch(true), shortcut: 'Ctrl+K' },
@@ -1005,7 +1065,11 @@ Practice Question: Compare and contrast the advantages and disadvantages of a pa
 
       {/* Analytics Panel */}
       {showAnalytics && (
-        <div className="mb-4 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+        <div className={`mb-4 p-4 ${
+          isDark ? 'bg-gray-800' : 'bg-white'
+        } rounded-xl border ${
+          isDark ? 'border-gray-700' : 'border-gray-200'
+        }`}>
           <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4 flex items-center">
             <BarChart3 className="w-5 h-5 mr-2 text-[#4A6FA5]" />
             Conversation Analytics
@@ -1045,15 +1109,23 @@ Practice Question: Compare and contrast the advantages and disadvantages of a pa
 
       {/* Multi-select Actions */}
       {isMultiSelect && selectedMessages.size > 0 && (
-        <div className="mb-4 p-3 bg-[#4A6FA5]/10 dark:bg-[#4A6FA5]/20 rounded-lg border border-[#4A6FA5]/20">
+        <div className={`mb-4 p-3 ${
+          isDark ? 'bg-[#4A6FA5]/20' : 'bg-gray-100'
+        } rounded-lg border ${
+          isDark ? 'border-[#4A6FA5]/20' : 'border-gray-200'
+        }`}>
           <div className="flex items-center justify-between">
             <div className="flex items-center space-x-4">
-              <span className="text-sm font-medium text-[#4A6FA5] dark:text-[#4A6FA5]">
+              <span className={`text-sm font-medium ${
+                isDark ? 'text-[#4A6FA5]' : 'text-gray-700'
+              }`}>
                 {selectedMessages.size} message{selectedMessages.size !== 1 ? 's' : ''} selected
               </span>
               <button
                 onClick={selectAllMessages}
-                className="text-xs text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white"
+                className={`text-xs ${
+                  isDark ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'
+                }`}
               >
                 Select All
               </button>
@@ -1087,7 +1159,11 @@ Practice Question: Compare and contrast the advantages and disadvantages of a pa
 
       {/* Enhanced Search Bar */}
       {showSearch && (
-        <div className="mb-4 p-4 bg-white dark:bg-gray-800 rounded-xl border border-gray-200 dark:border-gray-700">
+        <div className={`mb-4 p-4 ${
+          isDark ? 'bg-gray-800' : 'bg-white'
+        } rounded-xl border ${
+          isDark ? 'border-gray-700' : 'border-gray-200'
+        }`}>
           <div className="relative">
             <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 w-4 h-4 text-gray-400" />
             <input
@@ -1112,7 +1188,9 @@ Practice Question: Compare and contrast the advantages and disadvantages of a pa
         </div>
       )}
 
-      <div className={`flex-1 glass ${isFullscreen ? 'rounded-none' : 'rounded-xl'} border border-white/10 flex flex-col overflow-hidden`}>
+      <div className={`flex-1 ${
+        isDark ? 'glass' : 'bg-white border border-gray-200'
+      } ${isFullscreen ? 'rounded-none' : 'rounded-xl'} flex flex-col overflow-hidden`}>
         {/* Enhanced Chat Messages */}
         <div className="flex-1 overflow-y-auto p-6 space-y-6" ref={chatContainerRef}>
           {filteredMessages.length === 0 && chatMessages.length === 0 && (
@@ -1120,8 +1198,12 @@ Practice Question: Compare and contrast the advantages and disadvantages of a pa
               <div className="w-20 h-20 bg-gradient-to-br from-[#4A6FA5] to-[#3d5a8c] rounded-2xl flex items-center justify-center mx-auto mb-6 animate-pulse shadow-lg">
                 <Bot className="w-10 h-10 text-white" />
               </div>
-              <h3 className="text-2xl font-bold text-gray-900 dark:text-white mb-3">Welcome to BizTutor!</h3>
-              <p className="text-gray-600 dark:text-gray-300 max-w-lg mx-auto mb-8 text-lg">
+              <h3 className={`text-2xl font-bold mb-3 ${
+                isDark ? 'text-white' : 'text-gray-800'
+              }`}>Welcome to BizTutor!</h3>
+              <p className={`max-w-lg mx-auto mb-8 text-lg ${
+                isDark ? 'text-gray-300' : 'text-gray-600'
+              }`}>
                 I'm your AI tutor for Business Organization & Management. Ask me anything and I'll provide structured explanations with examples and practice questions.
               </p>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4 max-w-3xl mx-auto">
@@ -1138,7 +1220,13 @@ Practice Question: Compare and contrast the advantages and disadvantages of a pa
                     <button
                       key={index}
                       onClick={() => setInputMessage(suggestion.text)}
-                      className="group px-6 py-4 rounded-xl text-sm transition-all duration-200 bg-gradient-to-r from-gray-50 to-gray-100 dark:from-gray-800 dark:to-gray-700 hover:from-[#4A6FA5]/10 hover:to-[#3d5a8c]/10 border border-gray-200 dark:border-gray-600 hover:border-[#4A6FA5]/40 text-gray-700 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white shadow-sm hover:shadow-md"
+                      className={`group px-6 py-4 rounded-xl text-sm transition-all duration-200 ${
+                        isDark 
+                          ? 'bg-gradient-to-r from-gray-800 to-gray-700 hover:from-[#4A6FA5]/10 hover:to-[#3d5a8c]/10 border border-gray-600 hover:border-[#4A6FA5]/40 text-gray-300 hover:text-white'
+                          : 'bg-gradient-to-r from-gray-50 to-gray-100 hover:from-[#4A6FA5]/10 hover:to-[#3d5a8c]/10 border border-gray-200 hover:border-[#4A6FA5]/40 text-gray-700 hover:text-gray-900'
+                      } shadow-sm hover:shadow-md ${
+                        !isDark ? 'hover:shadow-glow-soft' : ''
+                      }`}
                     >
                       <div className="flex items-center space-x-3">
                         <div className={`w-8 h-8 bg-gradient-to-r ${suggestion.color} rounded-lg flex items-center justify-center`}>
@@ -1150,11 +1238,19 @@ Practice Question: Compare and contrast the advantages and disadvantages of a pa
                   );
                 })}
               </div>
-              <div className="mt-8 p-4 bg-gradient-to-r from-[#4A6FA5]/5 to-[#3d5a8c]/5 dark:from-[#4A6FA5]/10 dark:to-[#3d5a8c]/10 rounded-xl border border-[#4A6FA5]/20">
-                <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
+              <div className={`mt-8 p-4 ${
+                isDark 
+                  ? 'bg-gradient-to-r from-[#4A6FA5]/10 to-[#3d5a8c]/10' 
+                  : 'bg-gradient-to-r from-[#4A6FA5]/5 to-[#3d5a8c]/5'
+              } rounded-xl border border-[#4A6FA5]/20`}>
+                <p className={`text-sm mb-2 ${
+                  isDark ? 'text-gray-300' : 'text-gray-600'
+                }`}>
                   💡 <strong>Pro tip:</strong> Use keyboard shortcuts for faster navigation
                 </p>
-                <div className="flex flex-wrap justify-center gap-4 text-xs text-gray-500 dark:text-gray-400">
+                <div className={`flex flex-wrap justify-center gap-4 text-xs ${
+                  isDark ? 'text-gray-400' : 'text-gray-500'
+                }`}>
                   <span>Ctrl+K: Search</span>
                   <span>Ctrl+E: Export</span>
                   <span>Ctrl+I: Import</span>
@@ -1330,7 +1426,13 @@ Practice Question: Compare and contrast the advantages and disadvantages of a pa
         </div>
 
         {/* Input Area */}
-        <div className={`border-t border-white/10 p-4 sticky bottom-0 bg-[rgba(255,255,255,0.95)] dark:bg-[rgba(24,26,36,0.95)] backdrop-blur ${isFullscreen ? 'rounded-none' : 'rounded-b-xl'}`}>
+        <div className={`border-t ${
+          isDark ? 'border-white/10' : 'border-gray-200'
+        } p-4 sticky bottom-0 ${
+          isDark 
+            ? 'bg-[rgba(24,26,36,0.95)]' 
+            : 'bg-[rgba(255,255,255,0.95)]'
+        } backdrop-blur ${isFullscreen ? 'rounded-none' : 'rounded-b-xl'}`}>
           <div className="flex items-end space-x-3">
             <div className="flex-1 relative">
               <textarea
@@ -1339,7 +1441,11 @@ Practice Question: Compare and contrast the advantages and disadvantages of a pa
                 onChange={(e) => setInputMessage(e.target.value)}
                 onKeyPress={handleKeyPress}
                 placeholder="Ask about planning, organizing, controlling, or any B.O.M. topic..."
-                className="w-full resize-none border border-gray-300 dark:border-gray-600 rounded-xl px-4 py-3 bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-[#4A6FA5] focus:border-transparent transition-all duration-200"
+                className={`w-full resize-none border-2 rounded-xl px-4 py-3 focus:ring-2 focus:ring-[#4A6FA5] focus:border-transparent transition-all duration-200 ${
+                  isDark 
+                    ? 'border-gray-600 bg-gray-800 text-white' 
+                    : 'border-gray-400 bg-white text-gray-900'
+                }`}
                 rows={1}
                 disabled={isTyping}
                 style={{ minHeight: '48px', maxHeight: '120px' }}
@@ -1356,7 +1462,9 @@ Practice Question: Compare and contrast the advantages and disadvantages of a pa
               <Send className="w-5 h-5" />
             </button>
           </div>
-          <div className="flex items-center justify-between mt-2 text-xs text-gray-500 dark:text-gray-400">
+          <div className={`flex items-center justify-between mt-2 text-xs ${
+            isDark ? 'text-gray-400' : 'text-gray-500'
+          }`}>
             <div>
               Press Enter to send • Shift+Enter for new line
             </div>

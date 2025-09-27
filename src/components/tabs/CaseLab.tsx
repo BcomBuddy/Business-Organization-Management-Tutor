@@ -30,10 +30,12 @@ import {
   EyeOff
 } from 'lucide-react';
 import { useBizTutor } from '../../contexts/BizTutorContext';
+import { useTheme } from '../../contexts/ThemeContext';
 import type { CaseScenario, CaseOption } from '../../types/index';
 
 const CaseLab: React.FC = () => {
   const { cases, addAttemptLog, attemptLogs } = useBizTutor();
+  const { isDark } = useTheme();
   const [selectedCase, setSelectedCase] = useState<CaseScenario | null>(null);
   const [currentNodeIndex, setCurrentNodeIndex] = useState(0);
   const [decisions, setDecisions] = useState<{ nodeIndex: number; option: CaseOption }[]>([]);
